@@ -1,0 +1,36 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+library(raster)
+data = brick('IndianPines.tif')
+gt = raster('IndianPinesGt.tif')
+img = as.array(data)
+X = matrix(img, nrow = data@nrows*data@ncols, ncol = data@data@nlayers)
+```
+
+```{r}
+image(img[,,3])
+```
+```{r}
+c = cov(X)
+e = eigen(c)
+lamb = e$values
+U = e$vectors
+
+A = t(U)
+
+Y = A %*% t(X)
+```
+
+```{r}
+prin_1 = matrix(Y[1,], nrow = data@nrows, ncol = data@ncols)
+image(prin_1)
+```
+
+```{r}
+sigma = cov(t(Y))
+```
+
